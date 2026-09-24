@@ -102,10 +102,11 @@ void situation(int situation_num){
             digitalWrite(A1,LOW);
             break;
         case 10:
-            digitalWrite(A0, LOW);
+            digitalWrite(A0, HIGH);
             digitalWrite(A1, HIGH);
             digitalWrite(A2, LOW);
             delay(1000);
+            digitalWrite(A0,LOW);
             digitalWrite(A1,LOW);
             break;
         default:
