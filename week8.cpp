@@ -1,5 +1,4 @@
 #include <Servo.h>
-#include <cstdlib>
 
 //mid senser
 const int IR_LED_MID = 6;
@@ -19,8 +18,8 @@ const int RED_LED_LEFT = A2;
 //Servo
 Servo servoleft;
 Servo servoright;
-SERVO_LEFT_PIN = 13;
-SERVO_RIGHT_PIN = 12;
+const int SERVO_LEFT_PIN = 12;
+const int SERVO_RIGHT_PIN = 13;
 
 //condition val
 int left;
@@ -114,47 +113,52 @@ void situation(int situation_num){
     }
 }
 
-void adjast_move(){
-    left = irDistance(IR_LED_LEFT,IR_REV_LEFT); 
+void adjust_move(){
+    left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
     right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
     front = irDistance(IR_LED_MID, IR_REV_MID);
     //turning process (adjustment required)
     if (left == 5 || right == 5) { //there is a path on either left or right.
         if (front < 4) { // there is a wall in front
             if (left == 5 && right == 5){
-                
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
+                delay(1000);
             }
             //turn process
         } else {// there is a path in front
             servoleft.writeMicroseconds(1550);
-            servoright.writeMicroseconds(1450);
+            servoright.writeMicroseconds(1440);
         }
     } else {
         //going straight
         if (front < 4){
             //rotate. there is a wall in front and on the both side.
-            while (front != 5){
-                servoleft.writeMicroseconds(1550);
-                servoright.writeMilliseconds(1550);
+            while (front != 5 || (left !=right)){
+                servoleft.writeMicroseconds(1400);
+                servoright.writeMicroseconds(1400);
+                front = irDistance(IR_LED_MID, IR_REV_MID);
+                left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
+                right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
+                situation(3);      
             }
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1450);
         }
         else if (left == right){ // this means the robots is in the middle of walls.
-            servoleft.writeMilliseconds(1550);
-            servoright.writeMilliseconds(1450);
+            servoleft.writeMicroseconds(1550);
+            servoright.writeMicroseconds(1440);
             situation(1);
         } else if (left > right){
-            servoleft.writeMilliseconds(1550);
-            servoright.writeMilliseconds(1450 - std::abs(left - right) * 10);
-
+            servoleft.writeMicroseconds(1550);
+            servoright.writeMicroseconds(1430);
+            situation(6);
         } else {
-            servoleft.writeMicroseconds(1550 + std::abs(left - right) * 10);
-            servoright.writeMicroseconds(1450);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1440);
+            situation(5);
         }
     }
-
-
 }
 
 void setup(){
@@ -175,12 +179,5 @@ void setup(){
 }
 
 void loop(){
-    
-    adjast_move();
+    adjust_move();
 }
-
-
-
-
-
-
