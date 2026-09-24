@@ -118,7 +118,7 @@ void adjast_move(){
     left = irDistance(IR_LED_LEFT,IR_REV_LEFT); 
     right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
     front = irDistance(IR_LED_MID, IR_REV_MID);
-    //turning process (required adjustment)
+    //turning process (adjustment required)
     if (left == 5 || right == 5) { //there is a path on either left or right.
         if (front < 4) { // there is a wall in front
             if (left == 5 && right == 5){
