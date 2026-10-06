@@ -117,33 +117,49 @@ void adjust_move(){
     left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
     right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
     front = irDistance(IR_LED_MID, IR_REV_MID);
+    Serial.println(left);
+    Serial.println(right);
+    Serial.println(front);
     //turning process (adjustment required)
     if (left == 5 || right == 5) { //there is a path on either left or right.
         if (front < 4) { // there is a wall in front
             if (left == 5 && right == 5){
-                servoleft.writeMicroseconds(1500);
-                servoright.writeMicroseconds(1500);
-                delay(1000);
+                servoleft.writeMicroseconds(1480);
+                servoright.writeMicroseconds(1480);
+                delay(3000);
             }
-            //turn process
+            //turn left at an ideal position
+            else if (right < 4 && left == 5 && right > 1){
+                situation(3);
+                servoleft.writeMicroseconds(1480);
+                servoright.writeMicroseconds(1480);
+                delay(3000);
+            }
+            //turn left at a bad 
+            else if (right < 1 && left == 5) {
+                situation(9);
+            }
+            
         } else {// there is a path in front
+            situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1440);
         }
     } else {
         //going straight
         if (front < 4){
+            situation(4);
             //rotate. there is a wall in front and on the both side.
-            while (front != 5 || (left !=right)){
+            while ( front != 5 || (left != right) ){
                 servoleft.writeMicroseconds(1400);
                 servoright.writeMicroseconds(1400);
                 front = irDistance(IR_LED_MID, IR_REV_MID);
                 left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
-                right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
-                situation(3);      
+                right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);      
             }
             servoleft.writeMicroseconds(1550);
-            servoright.writeMicroseconds(1450);
+            servoright.writeMicroseconds(1440);
+            delay(1000);
         }
         else if (left == right){ // this means the robots is in the middle of walls.
             servoleft.writeMicroseconds(1550);
@@ -152,11 +168,11 @@ void adjust_move(){
         } else if (left > right){
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1430);
-            situation(6);
+            situation(1);
         } else {
             servoleft.writeMicroseconds(1560);
             servoright.writeMicroseconds(1440);
-            situation(5);
+            situation(1);
         }
     }
 }
