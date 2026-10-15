@@ -18,8 +18,8 @@ const int RED_LED_LEFT = A2;
 //Servo
 Servo servoleft;
 Servo servoright;
-const int SERVO_LEFT_PIN = 12;
-const int SERVO_RIGHT_PIN = 13;
+const int SERVO_LEFT_PIN = 13;
+const int SERVO_RIGHT_PIN = 12;
 
 //condition val
 int left;
@@ -124,96 +124,119 @@ void adjust_move(){
     Serial.println(front);
     //starting position
     if (start == true) {
-      //bad position to left wall
-      if (left <= 1 && front == 5 && right <= 5){
-        situation(5);
-        servoleft.writeMicroseconds(1560);
-        servoright.writeMicroseconds(1460);
-        delay(500);
-        servoleft.writeMicroseconds(1560);
-        servoright.writeMicroseconds(1480);
-        delay(500);
-        servoleft.writeMicroseconds(1500);
-        servoright.writeMicroseconds(1440);
-        delay(650);
-        servoleft.writeMicroseconds(1445);
-        servoright.writeMicroseconds(1550);
-        delay(1000);
+        //bad position to left wall
+        if (left <= 1 && front == 5){
+            situation(5);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1460);
+            delay(500);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1480);
+            delay(500);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1440);
+            delay(650);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(1000);
         }
-      //bad position to right wall
-      else if (right <= 1 && front == 5 && left <= 5){
-        situation(6);
-        servoleft.writeMicroseconds(1540);
-        servoright.writeMicroseconds(1430);
-        delay(500);
-        servoleft.writeMicroseconds(1520);
-        servoright.writeMicroseconds(1430);
-        delay(500);
-        servoleft.writeMicroseconds(1560);
-        servoright.writeMicroseconds(1500);
-        delay(450);
-        servoleft.writeMicroseconds(1445);
-        servoright.writeMicroseconds(1550);
-        delay(900);
-      }
-      else if (( left < right ) && (front < right) && front != 5) {
-        situation(7);
-        while ( front != 5 ){
-          servoleft.writeMicroseconds(1500);
-          servoright.writeMicroseconds(1560);
-          front = irDistance(IR_LED_MID, IR_REV_MID);
-          left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
-          right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);      
+        //bad position to right wall
+        else if (right <= 1 && front == 5){
+            situation(6);
+            servoleft.writeMicroseconds(1540);
+            servoright.writeMicroseconds(1430);
+            delay(500);
+            servoleft.writeMicroseconds(1520);
+            servoright.writeMicroseconds(1430);
+            delay(500);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1500);
+            delay(450);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(900);
         }
-        delay(500);
-      }
-      else if (( right < left ) && (front < left) && front != 5) {
-        situation(8);
-        while ( front != 5 ){
-          servoleft.writeMicroseconds(1440);
-          servoright.writeMicroseconds(1500);
-          front = irDistance(IR_LED_MID, IR_REV_MID);
-          left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
-          right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);      
+        //30 degree bad posistion on left
+        else if (( left < right ) && (front < right) && front != 5) {
+            situation(7);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1560);     
+            delay(800);
         }
-        delay(500);
-      }
+        //30 degree bad position on right
+        else if (( right < left ) && ( front < left ) && front != 5) {
+            situation(8);
+            servoleft.writeMicroseconds(1440);
+            servoright.writeMicroseconds(1500);
+            delay(800);
+        } else {
+            situation(0);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1500);
+        }
     }
     start = false;
     //turning process (adjustment required)
     if (left == 5 || right == 5) { //there is a path on either left or right.
         if (front < 2) { // there is a wall in front
             if (left == 5 && right == 5){
-                servoleft.writeMicroseconds(1480);
-                servoright.writeMicroseconds(1480);
-                delay(3000);
-            }
-            //turn left at an ideal position
-            else if (right < 4 && left == 5 && right > 1){
                 situation(3);
                 servoleft.writeMicroseconds(1480);
                 servoright.writeMicroseconds(1480);
                 delay(3000);
             }
-            //
-            else if (left < 4 && right == 5 && left > 1){
+            //turn left at an ideal position
+            else if (right <= 4 && left == 5 && right > 1){
+                situation(3);
+                servoleft.writeMicroseconds(1480);
+                servoright.writeMicroseconds(1480);
+                delay(3000);
+            }
+            //turn right at an ideal position
+            else if (left <= 4 && right == 5 && left > 1){
                 situation(2);
                 servoleft.writeMicroseconds(1520);
                 servoright.writeMicroseconds(1520);
                 delay(2000);
             }
-            //turn left at a bad 
-            else if (right < 1 && left == 5) {
+            //turn left at a bad position
+            else if (right <= 1 && left == 5) {
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
                 situation(9);
+                servoleft.writeMicroseconds(1480);
+                servoright.writeMicroseconds(1550);
+                delay(500);
+                servoleft.writeMicroseconds(1440);
+                servoright.writeMicroseconds(1520);
+                delay(600);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1440);
+                delay(500);
+            }
+            //turn right at a bad position
+            else if (left <= 1 && right == 5){
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
+                situation(10);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1470);
+                delay(500);
+                servoleft.writeMicroseconds(1520);
+                servoright.writeMicroseconds(1440);
+                delay(600);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1440);
+                delay(500);
             }
             else {
-              situation(0);
-              servoleft.writeMicroseconds(1500);
-              servoright.writeMicroseconds(1500);
+                //unknown situation
+                situation(0);
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
             }
-            
-            
-        } else {// there is a path in front
+        } else {
+            // there is a path in front
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1440);
@@ -233,8 +256,7 @@ void adjust_move(){
             servoleft.writeMicroseconds(1560);
             servoright.writeMicroseconds(1440);
             delay(1000);
-        }
-        else if (left == right){ // this means the robots is in the middle of walls.
+        } else if (left == right){ // this means the robots is in the middle of walls.
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1440);
             situation(1);
@@ -260,8 +282,8 @@ void setup(){
     pinMode(IR_LED_LEFT, OUTPUT);
     pinMode(IR_REV_LEFT, INPUT);
     pinMode(RED_LED_LEFT, OUTPUT);
-    servoleft.attach(SERVO_RIGHT_PIN);
-    servoright.attach(SERVO_LEFT_PIN);
+    servoleft.attach(SERVO_LEFT_PIN);
+    servoright.attach(SERVO_RIGHT_PIN);
     Serial.begin(9600);
     left = 5;
     right = 5;
