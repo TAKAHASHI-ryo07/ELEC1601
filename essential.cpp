@@ -142,7 +142,7 @@ void adjust_move(){
         }
     }
     //bad position to left
-    if (left == 0 && front == 5){
+    else if (left == 0 && front == 5){
         situation(5);
         servoleft.writeMicroseconds(1560);
         servoright.writeMicroseconds(1460);
@@ -221,14 +221,8 @@ void adjust_move(){
     //turning process
     else if (left == 5 || right == 5) { //there is a path on either left or right.
         if (front < 2) { // there is a wall in front
-            if (left == 5 && right == 5){
-                situation(3);
-                servoleft.writeMicroseconds(1472);
-                servoright.writeMicroseconds(1470);
-                delay(1900);
-            }
             //turn left at an ideal position
-            else if (right <= 4 && left == 5 && right >= 1){
+            if (right <= 4 && left == 5 && right >= 1){
                 situation(3);
                 servoleft.writeMicroseconds(1470);
                 servoright.writeMicroseconds(1472);

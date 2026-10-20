@@ -175,7 +175,7 @@ void adjust_move(){
             servoright.writeMicroseconds(1500);
             delay(800);
         //robot is at left corner
-        } else if (left <= 2 && front == 0){
+        } else if (left == 0 && front == 0){
             situation(9);
             servoleft.writeMicroseconds(1445);
             servoright.writeMicroseconds(1550);
