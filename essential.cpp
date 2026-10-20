@@ -26,6 +26,7 @@ int left;
 int right;
 int front;
 
+boolean start;
 
 int irDetect(int ir_led_pin, int ir_receiver_pin, long frequency){
     tone(ir_led_pin, frequency);
@@ -42,6 +43,14 @@ int irDistance(int ir_led_pin, int ir_receiver_pin){
     noTone(ir_led_pin);
     return distance;
 }//the bigger the distance is, the farther the object is
+
+//stop after test
+void finish(){
+    while (true) {
+        servoleft.writeMicroseconds(1500);
+        servoright.writeMicroseconds(1500);
+    }
+}
 
 void situation(int situation_num){
     switch (situation_num){
@@ -111,6 +120,10 @@ void situation(int situation_num){
         default:
             break;
     }
+    if (start == true){
+        delay(1000);
+        start = false;
+    }
 }
 
 void adjust_move(){
@@ -121,7 +134,7 @@ void adjust_move(){
     Serial.println(right);
     Serial.println(front);
     //moving foward
-    if (right == left){
+    if (right == left || (left - right) == 1 || (left - right) == -1){
         if (front < 2){
             situation(4);
             //rotate. there is a wall in front and on the both side.
@@ -139,6 +152,7 @@ void adjust_move(){
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
+            delay(2000);
         }
     }
     //bad position to left
@@ -155,7 +169,7 @@ void adjust_move(){
         delay(700);
         servoleft.writeMicroseconds(1445);
         servoright.writeMicroseconds(1550);
-        delay(1200);    
+        delay(1200);
     }
     //bad position to right wall
     else if (right == 0 && front == 5){
@@ -174,14 +188,14 @@ void adjust_move(){
         delay(1000);
     }
     //30 degree bad posistion on left(this is confusing with the right turn. we have to make a diff)
-    else if (( left < right ) && (front < right) && front != 5 && front > 0 && left == 1) {
+    else if (( left < right ) && (front < right) && front != 5 && front > 0 && (left == 0 || left == 1)) {
         situation(7);
         servoleft.writeMicroseconds(1500);
         servoright.writeMicroseconds(1560);     
         delay(700);
     }
     //30 degree bad position on right(this is confusing with the left turn. we have to make a diff)
-    else if (( right < left ) && ( front < left ) && front != 5 && front > 0 && right == 1) {
+    else if (( right < left ) && ( front < left ) && front != 5 && front > 0 && (right == 0 || right == 1)) {
         situation(8);
         servoleft.writeMicroseconds(1440);
         servoright.writeMicroseconds(1500);
@@ -227,6 +241,10 @@ void adjust_move(){
                 servoleft.writeMicroseconds(1470);
                 servoright.writeMicroseconds(1472);
                 delay(1900);
+                situation(1);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1443);
+                delay(1000);
             }
             //turn right at an ideal position
             else if (left <= 4 && right == 5 && left >= 1){
@@ -234,6 +252,9 @@ void adjust_move(){
                 servoleft.writeMicroseconds(1520);
                 servoright.writeMicroseconds(1519);
                 delay(2000);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1443);
+                delay(1000);
             } else {
                 //unknown situation
                 situation(0);
@@ -245,6 +266,7 @@ void adjust_move(){
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
+            delay(1000);
         }
     }
     else {
@@ -252,7 +274,7 @@ void adjust_move(){
         servoleft.writeMicroseconds(1500);
         servoright.writeMicroseconds(1500);
     }
-    
+    finish();
 }
 
 void setup(){
@@ -270,6 +292,7 @@ void setup(){
     Serial.begin(9600);
     left = 5;
     right = 5;
+    start = true;
 }
 
 void loop(){
