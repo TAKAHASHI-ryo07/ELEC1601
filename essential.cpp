@@ -174,14 +174,14 @@ void adjust_move(){
         delay(1000);
     }
     //30 degree bad posistion on left(this is confusing with the right turn. we have to make a diff)
-    else if (( left < right ) && (front < right) && front != 5 && front > 0 && left == 1) {
+    else if (( left < right ) && (front < right) && front != 5 && front > 0 && (left == 0 || left = 1)) {
         situation(7);
         servoleft.writeMicroseconds(1500);
         servoright.writeMicroseconds(1560);     
         delay(700);
     }
     //30 degree bad position on right(this is confusing with the left turn. we have to make a diff)
-    else if (( right < left ) && ( front < left ) && front != 5 && front > 0 && right == 1) {
+    else if (( right < left ) && ( front < left ) && front != 5 && front > 0 && (right == 0 || right == 1)) {
         situation(8);
         servoleft.writeMicroseconds(1440);
         servoright.writeMicroseconds(1500);
