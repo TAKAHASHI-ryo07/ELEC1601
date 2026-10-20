@@ -26,6 +26,8 @@ int left;
 int right;
 int front;
 
+boolean start;
+
 
 int irDetect(int ir_led_pin, int ir_receiver_pin, long frequency){
     tone(ir_led_pin, frequency);
@@ -110,6 +112,10 @@ void situation(int situation_num){
             break;
         default:
             break;
+    }
+    if (start == true){
+        delay(1000);
+        start = false;
     }
 }
 
@@ -270,6 +276,7 @@ void setup(){
     Serial.begin(9600);
     left = 5;
     right = 5;
+    start = true;
 }
 
 void loop(){
