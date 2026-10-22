@@ -150,8 +150,8 @@ void adjust_move(){
             delay(500);
         } else { // this means the robots is in the middle of walls.
             situation(1);
-            servoleft.writeMicroseconds(1550);
-            servoright.writeMicroseconds(1443);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1500);
             delay(2000);
         }
     }

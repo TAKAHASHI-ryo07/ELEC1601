@@ -42,7 +42,7 @@ int irDetect(int ir_led_pin, int ir_receiver_pin, long frequency){
 
 int irDistance(int ir_led_pin, int ir_receiver_pin){
     int distance = 0;
-    for (long f = 38000; f <= 42000; f += 1000){
+    for (long f = 38000; f <= 48000; f += 1100){
         distance += irDetect(ir_led_pin, ir_receiver_pin, f);
     }
     noTone(ir_led_pin);
@@ -148,80 +148,74 @@ void adjust_move(){
     //starting position
     if (start == true) {
         //bad position to left wall
-        if (left == 0 && front == 5){
+        if (left == 0 && front == 10){
             situation(5);
-            servoleft.writeMicroseconds(1560);
-            servoright.writeMicroseconds(1460);
-            delay(600);
             servoleft.writeMicroseconds(1560);
             servoright.writeMicroseconds(1480);
             delay(600);
             servoleft.writeMicroseconds(1500);
             servoright.writeMicroseconds(1440);
-            delay(700);
-            servoleft.writeMicroseconds(1445);
-            servoright.writeMicroseconds(1550);
-            delay(1200);
-        }
-        //bad position to right wall
-        else if (right == 0 && front == 5){
-            situation(6);
-            servoleft.writeMicroseconds(1540);
-            servoright.writeMicroseconds(1430);
-            delay(700);
-            servoleft.writeMicroseconds(1520);
-            servoright.writeMicroseconds(1430);
-            delay(700);
-            servoleft.writeMicroseconds(1560);
-            servoright.writeMicroseconds(1500);
             delay(500);
             servoleft.writeMicroseconds(1445);
             servoright.writeMicroseconds(1550);
             delay(1000);
         }
-        //30 degree bad posistion on left
-        else if (( left < right ) && (front < right) && front != 5 && front > 0) {
-            situation(7);
-            servoleft.writeMicroseconds(1500);
-            servoright.writeMicroseconds(1560);     
-            delay(700);
-        }
-        //30 degree bad position on right
-        else if (( right < left ) && ( front < left ) && front != 5 && front > 0) {
-            situation(8);
-            servoleft.writeMicroseconds(1440);
-            servoright.writeMicroseconds(1500);
-            delay(800);
-        //robot is at left corner
-        } else if (left == 0 && front == 0){
-            situation(9);
-            servoleft.writeMicroseconds(1445);
-            servoright.writeMicroseconds(1550);
-            delay(1500);
-            servoleft.writeMicroseconds(1560);
-            servoright.writeMicroseconds(1460);
-            delay(500);
-            servoleft.writeMicroseconds(1560);
-            servoright.writeMicroseconds(1480);
-            delay(500);
-            servoleft.writeMicroseconds(1500);
-            servoright.writeMicroseconds(1440);
-            delay(650);
-        //robot is at right corner
-        } else if (right == 0 && front == 0){
-            situation(10);
-            servoleft.writeMicroseconds(1445);
-            servoright.writeMicroseconds(1550);
-            delay(1100);
-            servoleft.writeMicroseconds(1540);
-            servoright.writeMicroseconds(1430);
-            delay(700);
+        //bad position to right wall
+        else if (right == 0 && front == 10){
+            situation(6);
             servoleft.writeMicroseconds(1520);
             servoright.writeMicroseconds(1430);
             delay(700);
             servoleft.writeMicroseconds(1560);
             servoright.writeMicroseconds(1500);
             delay(450);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(800);
+        }
+        //30 degree bad posistion on left
+        else if (( left < right ) && front >= 8 && left >= 1 && left <= 5) {
+            situation(7);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1560);     
+            delay(500);
+        }
+        //30 degree bad position on right
+        else if (( right < left ) && front >= 8 && right >= 1 && right <= 5) {
+            situation(8);
+            servoleft.writeMicroseconds(1430);
+            servoright.writeMicroseconds(1500);
+            delay(550);
+        //robot is at left corner
+        } else if (left <= 3 && front <= 3){
+            situation(9);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(1500);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1460);
+            delay(600);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1480);
+            delay(600);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1440);
+            delay(700); 
+        //robot is at right corner
+        } else if (right <= 3 && front <= 3){
+            situation(10);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(1600);
+            servoleft.writeMicroseconds(1540);
+            servoright.writeMicroseconds(1430);
+            delay(600);
+            servoleft.writeMicroseconds(1520);
+            servoright.writeMicroseconds(1430);
+            delay(600);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1500);
+            delay(500);
         } else {
             situation(0);
             servoleft.writeMicroseconds(1500);
@@ -230,27 +224,54 @@ void adjust_move(){
         return;
     }
     //turning process (adjustment required)
-    if (left == 5 || right == 5) { //there is a path on either left or right.
-        if (front < 2) { // there is a wall in front
-            if (left == 5 && right == 5){
+    if (left == 10 || right == 10) { //there is a path on either left or right.
+        if (front <= 8) { // there is a wall in front
+            if (left == 10 && right == 10){
                 situation(3);
-                servoleft.writeMicroseconds(1472);
-                servoright.writeMicroseconds(1470);
-                delay(1900);
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1400);
+                delay(1150);
+                situation(1);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1443);
+                delay(1000);
             }
             //turn left at an ideal position
-            else if (right <= 4 && left == 5 && right >= 1){
+            else if (right <= 8 && left == 10 && right >= 4){
                 situation(3);
-                servoleft.writeMicroseconds(1470);
-                servoright.writeMicroseconds(1472);
-                delay(1900);
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1400);
+                delay(1150);
+                situation(1);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1443);
+                delay(1000);
+            }
+            //right corner 
+            else if (left == 10 && right <= 3){
+                situation(10);
+                servoleft.writeMicroseconds(1445);
+                servoright.writeMicroseconds(1550);
+                delay(1600);
+                servoleft.writeMicroseconds(1540);
+                servoright.writeMicroseconds(1430);
+                delay(600);
+                servoleft.writeMicroseconds(1520);
+                servoright.writeMicroseconds(1430);
+                delay(600);
+                servoleft.writeMicroseconds(1560);
+                servoright.writeMicroseconds(1500);
+                delay(500);
             }
             //turn right at an ideal position
-            else if (left <= 4 && right == 5 && left >= 1){
+            else if (left <= 8 && right == 10 && left >= 5){
                 situation(2);
-                servoleft.writeMicroseconds(1520);
-                servoright.writeMicroseconds(1519);
-                delay(2000);
+                servoleft.writeMicroseconds(1600);
+                servoright.writeMicroseconds(1500);
+                delay(1180);
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1443);
+                delay(1000);
             } else {
                 //unknown situation
                 situation(0);
@@ -265,12 +286,12 @@ void adjust_move(){
         }
     } else {
         //going straight
-        if (front < 2){
+        if (front <= 7){
             situation(4);
             //rotate. there is a wall in front and on the both side.
-            while ( front != 5 || (left != right) ){
-                servoleft.writeMicroseconds(1400);
-                servoright.writeMicroseconds(1400);
+            while ( front != 10 || (left != right) ){
+                servoleft.writeMicroseconds(1430);
+                servoright.writeMicroseconds(1430);
                 front = irDistance(IR_LED_MID, IR_REV_MID);
                 left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
                 right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);      
@@ -286,7 +307,7 @@ void adjust_move(){
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1430);
-        } else {
+        } else if (left < right){
             situation(1);
             servoleft.writeMicroseconds(1570);
             servoright.writeMicroseconds(1450);
