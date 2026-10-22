@@ -223,6 +223,7 @@ void adjust_move(){
         }
         return;
     }
+    start = false;
     //turning process (adjustment required)
     if (left == 10 || right == 10) { //there is a path on either left or right.
         if (front <= 8) { // there is a wall in front
