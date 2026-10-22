@@ -237,7 +237,7 @@ void adjust_move(){
                 delay(1000);
             }
             //turn left at an ideal position
-            else if (right <= 8 && left == 10 && right >= 4){
+            else if (right <= 9 && left == 10 && right >= 4){
                 situation(3);
                 servoleft.writeMicroseconds(1500);
                 servoright.writeMicroseconds(1400);
@@ -249,6 +249,8 @@ void adjust_move(){
             }
             //right corner 
             else if (left == 10 && right <= 3){
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
                 situation(10);
                 servoleft.writeMicroseconds(1445);
                 servoright.writeMicroseconds(1550);
@@ -264,14 +266,32 @@ void adjust_move(){
                 delay(500);
             }
             //turn right at an ideal position
-            else if (left <= 8 && right == 10 && left >= 5){
+            else if (left <= 9 && right == 10 && left >= 4){
                 situation(2);
                 servoleft.writeMicroseconds(1600);
                 servoright.writeMicroseconds(1500);
                 delay(1180);
+                situation(1);
                 servoleft.writeMicroseconds(1550);
                 servoright.writeMicroseconds(1443);
                 delay(1000);
+            // too close to the wall
+            } else if (left <= 3 && right == 10){
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1500);
+                situation(9);
+                servoleft.writeMicroseconds(1445);
+                servoright.writeMicroseconds(1550);
+                delay(1500);
+                servoleft.writeMicroseconds(1560);
+                servoright.writeMicroseconds(1460);
+                delay(600);
+                servoleft.writeMicroseconds(1560);
+                servoright.writeMicroseconds(1480);
+                delay(600);
+                servoleft.writeMicroseconds(1500);
+                servoright.writeMicroseconds(1440);
+                delay(700);
             } else {
                 //unknown situation
                 situation(0);
