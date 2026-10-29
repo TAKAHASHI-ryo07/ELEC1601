@@ -130,7 +130,6 @@ void situation(int situation_num){
     if (start == true){
         delay(1000);
         start = false;
-        return;
     }
 }
 
@@ -217,6 +216,7 @@ void adjust_move(){
             servoleft.writeMicroseconds(1500);
             servoright.writeMicroseconds(1500);
         }
+        return;
     }
     start = false;
     //turning process (adjustment required)
@@ -253,6 +253,22 @@ void adjust_move(){
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
             delay(800);
+        } else if (left <= 3) {
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1500);
+            situation(9);
+            servoleft.writeMicroseconds(1445);
+            servoright.writeMicroseconds(1550);
+            delay(1500);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1460);
+            delay(600);
+            servoleft.writeMicroseconds(1560);
+            servoright.writeMicroseconds(1480);
+            delay(600);
+            servoleft.writeMicroseconds(1500);
+            servoright.writeMicroseconds(1440);
+            delay(700);
         } else {
             situation(0);
             servoleft.writeMicroseconds(1500);
