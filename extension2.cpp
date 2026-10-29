@@ -137,9 +137,6 @@ void adjust_move(){
     left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
     right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);
     front = irDistance(IR_LED_MID, IR_REV_MID);
-    Serial.println(left);
-    Serial.println(right);
-    Serial.println(front);
     //starting position
     if (start == true) {
         //bad position to left wall
@@ -229,37 +226,45 @@ void adjust_move(){
             situation(3);
             servoleft.writeMicroseconds(1500);
             servoright.writeMicroseconds(1400);
-            delay(1150);
+            delay(1100);
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
-            delay(800);
+            delay(100);
         } else if (front >= 9){
             // there is a path in front, going front and follow the left wall
             situation(1);
             longdead_start = false;
-            servoleft.writeMicroseconds(1550);
-            servoright.writeMicroseconds(1443);
-        } else if (left <= 9 && right == 10 && left >= 4){
+            if (left >= 4){
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1424);
+            } else if (left <= 1){
+                servoleft.writeMicroseconds(1570);
+                servoright.writeMicroseconds(1444);
+            } else {
+                servoleft.writeMicroseconds(1550);
+                servoright.writeMicroseconds(1444);
+            }
+        } else if (left <= 9 && right == 10 && left >= 3){
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
-            delay(800);
+            delay(150);
             situation(2);
             servoleft.writeMicroseconds(1600);
             servoright.writeMicroseconds(1500);
-            delay(1180);
+            delay(1100);
             situation(1);
             servoleft.writeMicroseconds(1550);
             servoright.writeMicroseconds(1443);
-            delay(800);
-        } else if (left <= 3) {
+            delay(100);
+        } else if (left <= 2) {
             servoleft.writeMicroseconds(1500);
             servoright.writeMicroseconds(1500);
             situation(9);
             servoleft.writeMicroseconds(1445);
             servoright.writeMicroseconds(1550);
-            delay(1500);
+            delay(1700);
             servoleft.writeMicroseconds(1560);
             servoright.writeMicroseconds(1460);
             delay(600);
@@ -279,16 +284,13 @@ void adjust_move(){
         if (front <= 7){
             situation(4);
             //rotate. there is a wall in front and on the both side.
-            while ( front != 10 || (left != right) ){
-                servoleft.writeMicroseconds(1430);
-                servoright.writeMicroseconds(1430);
+            while ( front != 10 || left == 10){
+                servoleft.writeMicroseconds(1465);
+                servoright.writeMicroseconds(1445);
                 front = irDistance(IR_LED_MID, IR_REV_MID);
-                left = irDistance(IR_LED_LEFT,IR_REV_LEFT);
-                right = irDistance(IR_LED_RIGHT,IR_REV_RIGHT);      
+                left = irDistance(IR_LED_LEFT, IR_REV_LEFT);
             }
-            servoleft.writeMicroseconds(1560);
-            servoright.writeMicroseconds(1440);
-            delay(500);
+            delay(400);
         } else {
             if (longdead_start == false){ //checking if it's long dead or not by time from the start of long corrider
                 longdead_start = true;
@@ -297,15 +299,15 @@ void adjust_move(){
             if (left == right){ // this means the robots is in the middle of walls.
                 situation(1);
                 servoleft.writeMicroseconds(1550);
-                servoright.writeMicroseconds(1443);
+                servoright.writeMicroseconds(1444);
             } else if (left > right){
                 situation(1);
                 servoleft.writeMicroseconds(1550);
-                servoright.writeMicroseconds(1430);
+                servoright.writeMicroseconds(1424);
             } else if (right > left){
                 situation(1);
                 servoleft.writeMicroseconds(1570);
-                servoright.writeMicroseconds(1450);
+                servoright.writeMicroseconds(1444);
             }
         }
     }
